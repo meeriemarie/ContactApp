@@ -10,26 +10,26 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ContactsDao {
     @Insert
-    fun addContact(contactEntity: ContactEntity)
+    suspend fun addContact(contactEntity: ContactEntity)
 
     @Update
-    fun updateContact(contactEntity: ContactEntity)
+    suspend fun updateContact(contactEntity: ContactEntity)
 
     @Delete
-    fun deleteContact(contactEntity: ContactEntity)
+    suspend fun deleteContact(contactEntity: ContactEntity)
 
     @Query("SELECT * FROM contacts")
     fun readAllContacts(): Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM contacts WHERE name = :contactName")
-    fun findContactsByName(contactName: String)
+    fun findContactsByName(contactName: String) : Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM contacts WHERE telephone_number = :telephoneNumber ORDER BY name")
-    fun findContactsByTelNum(telephoneNumber: String): List<ContactEntity>
+    fun findContactsByTelNum(telephoneNumber: String): Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM contacts WHERE age > 30 ORDER BY name")
-    fun findContactsOver30(): List<ContactEntity>
+    fun findContactsOver30(): Flow<List<ContactEntity>>
 
     @Query("SELECT * FROM contacts WHERE age = :age AND name LIKE '%' || :term || '%' ORDER BY name")
-    fun findContactsByAgeAndNameContainingTerm(age: Int, term: String): List<ContactEntity>
+    fun findContactsByAgeAndNameContainingTerm(age: Int, term: String): Flow<List<ContactEntity>>
 }
